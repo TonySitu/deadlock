@@ -100,25 +100,28 @@ class View:  # todo create second tab that searches a player's champion stats op
                                              columns=('probably', 'going', 'to', 'be', 'lots', 'of', 'columns'),
                                              show='headings', selectmode='none')
         self.match_stats_tree.heading('probably', text='probably')
-        self.match_stats_tree.heading('going', text='probably')
+        self.match_stats_tree.heading('going', text='going')
         self.match_stats_tree.heading('to', text='to')
         self.match_stats_tree.heading('be', text='be')
         self.match_stats_tree.heading('lots', text='lots')
         self.match_stats_tree.heading('of', text='of')
         self.match_stats_tree.heading('columns', text='columns')
+        self.autofit_treeview_columns(self.match_stats_tree)
         self.match_stats_tree.pack(fill='both')
-
-    def add_children(self):
-        selected_items = self.player_tree.selection()
-        if not selected_items:
-            return
-
-        selected_item = selected_items[0]
-        self.player_tree.insert(parent=selected_item, index=tk.END, values=("Detail A1", "Info A1"))
-        self.player_tree.item(selected_item, open=True)  # todo refactor this function to create new table for matches
 
     def get_match_tree(self) -> ttk.Treeview:
         return self.match_tree
 
+    @staticmethod
+    def autofit_treeview_columns(treeview: ttk.Treeview):
+        for col in treeview["columns"]:
+            max_length = len(col)  # Start with the header length
+            for item in treeview.get_children():
+                cell_value = str(treeview.set(item, col))  # Get cell value as string
+                max_length = max(max_length, len(cell_value))
+            # Add some padding for aesthetics
+            treeview.column(col, width=(max_length + 2) * 7)
+
     def run(self):
         self.window.mainloop()
+
