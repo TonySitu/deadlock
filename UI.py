@@ -10,7 +10,7 @@ def get_sample_data2() -> list:
     return ['this', 'is', 'the', 'second', 'set', 'of', 'sample', 'data']  # todo remove later
 
 
-class View:
+class View:  # todo create second tab that searches a player's champion stats opposed to match stats
     DEFAULT_INPUT_TEXT = 'Enter nothing for all players or search for a specific player name'
     controller = None
     window = None
