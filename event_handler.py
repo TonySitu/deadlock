@@ -22,3 +22,10 @@ def handle_player_search():
 
 def handle_match_search():
     print('match search')
+
+
+def select_item(_, table):
+    print(table.selection())
+    for i in table.selection():
+        print(table.item(i))
+

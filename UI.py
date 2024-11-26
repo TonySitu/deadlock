@@ -3,17 +3,11 @@ from tkinter import ttk
 
 
 def get_sample_data1() -> list:
-    return ['hi', 'this', 'is', 'a', 'test', 'for', 'some', 'data']
+    return ['hi', 'this', 'is', 'a', 'test', 'for', 'some', 'data']  # todo remove later
 
 
 def get_sample_data2() -> list:
-    return ['this', 'is', 'the', 'second', 'set', 'of', 'sample', 'data']
-
-
-def select_item(_, table):
-    print(table.selection())
-    for i in table.selection():
-        print(table.item(i))
+    return ['this', 'is', 'the', 'second', 'set', 'of', 'sample', 'data']  # todo remove later
 
 
 class View:
