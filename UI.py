@@ -17,6 +17,8 @@ def select_item(_, table):
 
 
 class View:
+    DEFAULT_INPUT_TEXT = 'Enter nothing for all players or search for a specific player name'
+    controller = None
     window = None
     player_tree = None
     match_tree = None
@@ -25,10 +27,12 @@ class View:
     middle_frame = None
     bottom_frame = None
     input_text = None
+    textfield_string = None
     input_button = None
     menu = None
 
-    def __init__(self):
+    def __init__(self, controller):
+        self.controller = controller
         self.window = tk.Tk()
         self.window.title('Deadlock Tracker')
 
@@ -51,8 +55,15 @@ class View:
         self.top_frame = ttk.Frame(self.window, width=screen_width * .32, height=screen_height * .1)
         self.top_frame.pack_propagate(False)
 
-        self.input_text = ttk.Entry(self.top_frame, width=60)
+        self.textfield_string = tk.StringVar(value=self.DEFAULT_INPUT_TEXT)
+        self.input_text = tk.Entry(self.top_frame, width=60, fg='gray', textvariable=self.textfield_string)
         self.input_text.pack(side=tk.LEFT)
+        self.input_text.bind("<FocusIn>",
+                             lambda event: self.controller.on_entry_click(textfield_string=self.textfield_string,
+                                                                          textfield=self.input_text))
+        self.input_text.bind("<FocusOut>",
+                             lambda event: self.controller.on_focus_out(textfield_string=self.textfield_string,
+                                                                        textfield=self.input_text))
 
         self.input_button = ttk.Button(self.top_frame, text='Search Player')
         self.input_button.pack(side=tk.RIGHT)
@@ -71,18 +82,19 @@ class View:
         for data in get_sample_data1():
             self.player_tree.insert(parent='', index=tk.END, values=(data,))
 
-        self.player_tree.bind('<<TreeviewSelect>>', lambda event: select_item(event, self.player_tree))  # todo update
+        self.player_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_player_search())  # todo update
 
         # match tree config
         self.match_tree = ttk.Treeview(self.middle_frame, columns=('more', 'data'), show='headings',
                                        selectmode='browse')
+
         self.match_tree.pack(side=tk.LEFT, fill="both", expand=True, padx=5, pady=5)
         self.match_tree.heading('more', text='first set')
         self.match_tree.heading('data', text='second set')
         for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
             self.match_tree.insert(parent='', index=tk.END, values=(data1, data2))
 
-        self.match_tree.bind('<<TreeviewSelect>>', lambda event: select_item(event, self.player_tree))  # todo update
+        self.match_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_match_search())  # todo update
 
         # bottom frame config
         self.bottom_frame = ttk.Frame(self.window, width=screen_width * .8, height=screen_height * .5, borderwidth=10,
@@ -111,14 +123,8 @@ class View:
         self.player_tree.insert(parent=selected_item, index=tk.END, values=("Detail A1", "Info A1"))
         self.player_tree.item(selected_item, open=True)  # todo refactor this function to create new table for matches
 
+    def get_match_tree(self) -> ttk.Treeview:
+        return self.match_tree
+
     def run(self):
         self.window.mainloop()
-
-
-def main():
-    view = View()
-    view.run()
-
-
-if __name__ == "__main__":
-    main()
