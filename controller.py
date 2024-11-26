@@ -16,13 +16,11 @@ class Controller:
     def on_focus_out(textfield_string, textfield):
         event.handle_focus_out(textfield_string, textfield)
 
-    @staticmethod
-    def on_player_search():
-        event.handle_player_search()
+    def on_player_search(self):
+        event.handle_player_search(self.view)
 
-    @staticmethod
-    def on_match_search():
-        event.handle_match_search()
+    def on_match_search(self):
+        event.handle_match_search(self.view)
 
 
 def main():

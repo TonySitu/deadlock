@@ -14,7 +14,12 @@ class View:  # todo create second tab that searches a player's champion stats op
     DEFAULT_INPUT_TEXT = 'Enter nothing for all players or search for a specific player name'
     controller = None
     window = None
+    notebook = None
+    tab1 = None
+    tab2 = None
     player_tree = None
+    previous_player_selection = None
+    previous_match_selection = None
     match_tree = None
     match_stats_tree = None
     top_frame = None
@@ -45,8 +50,16 @@ class View:  # todo create second tab that searches a player's champion stats op
         add_menu.add_command(label='Add', command=lambda: None)  # todo add method to add matches
         self.menu.add_cascade(label='Add Match', menu=add_menu)
 
+        # tab config
+        self.notebook = ttk.Notebook(self.window)
+        self.tab1 = ttk.Frame(self.notebook)
+        self.tab2 = ttk.Frame(self.notebook)
+        self.notebook.add(self.tab1, text='Tab1')
+        self.notebook.add(self.tab2, text='Tab2')
+        self.notebook.pack()
+
         # init top frame
-        self.top_frame = ttk.Frame(self.window, width=screen_width * .32, height=screen_height * .1)
+        self.top_frame = ttk.Frame(self.tab1, width=screen_width * .32, height=screen_height * .1)
         self.top_frame.pack_propagate(False)
 
         self.textfield_string = tk.StringVar(value=self.DEFAULT_INPUT_TEXT)
@@ -64,7 +77,7 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.top_frame.pack()
 
         # init middle frame
-        self.middle_frame = ttk.Frame(self.window, width=screen_width * .8, height=screen_height * .3, borderwidth=10,
+        self.middle_frame = ttk.Frame(self.tab1, width=screen_width * .8, height=screen_height * .3, borderwidth=10,
                                       relief=tk.RIDGE)
         self.middle_frame.pack_propagate(False)
         self.middle_frame.pack()
@@ -91,14 +104,14 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.match_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_match_search())  # todo update
 
         # bottom frame config
-        self.bottom_frame = ttk.Frame(self.window, width=screen_width * .8, height=screen_height * .5, borderwidth=10,
+        self.bottom_frame = ttk.Frame(self.tab1, width=screen_width * .8, height=screen_height * .5, borderwidth=10,
                                       relief=tk.RIDGE)
         self.bottom_frame.pack_propagate(False)
         self.bottom_frame.pack()
 
         self.match_stats_tree = ttk.Treeview(self.bottom_frame,
                                              columns=('probably', 'going', 'to', 'be', 'lots', 'of', 'columns'),
-                                             show='headings', selectmode='none')
+                                             height=100, show='headings', selectmode='none')
         self.match_stats_tree.heading('probably', text='probably')
         self.match_stats_tree.heading('going', text='going')
         self.match_stats_tree.heading('to', text='to')
@@ -108,6 +121,24 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.match_stats_tree.heading('columns', text='columns')
         self.autofit_treeview_columns(self.match_stats_tree)
         self.match_stats_tree.pack(fill='both')
+
+    def get_player_tree(self) -> ttk.Treeview:
+        return self.player_tree
+
+    def get_match_tree(self) -> ttk.Treeview:
+        return self.match_tree
+
+    def get_previous_player_selection(self):
+        return self.previous_player_selection
+
+    def get_previous_match_selection(self):
+        return self.previous_match_selection
+
+    def set_previous_match_selection(self, match):
+        self.previous_match_selection = match
+
+    def set_previous_player_selection(self, player):
+        self.previous_player_selection = player
 
     def get_match_tree(self) -> ttk.Treeview:
         return self.match_tree
@@ -124,4 +155,3 @@ class View:  # todo create second tab that searches a player's champion stats op
 
     def run(self):
         self.window.mainloop()
-
