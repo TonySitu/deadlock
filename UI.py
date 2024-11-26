@@ -20,8 +20,9 @@ class View:
     window = None
     player_tree = None
     match_tree = None
-    general_stats_tree = None
+    match_stats_tree = None
     top_frame = None
+    middle_frame = None
     bottom_frame = None
     input_text = None
     input_button = None
@@ -37,17 +38,17 @@ class View:
         print(f'x:{screen_width} y:{screen_height}')
         self.window.geometry(f"{screen_width}x{screen_height}+0+0")
         self.window.state('zoomed')
+        self.window.bind('<Escape>', lambda event: self.window.quit())
 
         # init menu
-        self.menu = tk.Menu(self.menu)
+        self.menu = tk.Menu(self.menu, tearoff=False)
         self.window.configure(menu=self.menu)
-        add_menu = tk.Menu(self.menu)
+        add_menu = tk.Menu(self.menu, tearoff=False)
         add_menu.add_command(label='Add', command=lambda: None)  # todo add method to add matches
         self.menu.add_cascade(label='Add Match', menu=add_menu)
 
         # init top frame
-        self.top_frame = ttk.Frame(self.window, width=screen_width * .32, height=screen_height * .1, borderwidth=10,
-                                   relief=tk.RIDGE)
+        self.top_frame = ttk.Frame(self.window, width=screen_width * .32, height=screen_height * .1)
         self.top_frame.pack_propagate(False)
 
         self.input_text = ttk.Entry(self.top_frame, width=60)
@@ -57,31 +58,49 @@ class View:
         self.input_button.pack(side=tk.RIGHT)
         self.top_frame.pack()
 
-        # init bottom frame
-        self.bottom_frame = ttk.Frame(self.window, width=screen_width * .8, height=screen_height * .3, borderwidth=10,
+        # init middle frame
+        self.middle_frame = ttk.Frame(self.window, width=screen_width * .8, height=screen_height * .3, borderwidth=10,
+                                      relief=tk.RIDGE)
+        self.middle_frame.pack_propagate(False)
+        self.middle_frame.pack()
+
+        # player tree config
+        self.player_tree = ttk.Treeview(self.middle_frame, columns=('name',), show='headings', selectmode='browse')
+        self.player_tree.pack(side=tk.LEFT, fill="both", expand=True, padx=5, pady=5)
+        self.player_tree.heading('name', text='Player Name')
+        for data in get_sample_data1():
+            self.player_tree.insert(parent='', index=tk.END, values=(data,))
+
+        self.player_tree.bind('<<TreeviewSelect>>', lambda event: select_item(event, self.player_tree))  # todo update
+
+        # match tree config
+        self.match_tree = ttk.Treeview(self.middle_frame, columns=('more', 'data'), show='headings',
+                                       selectmode='browse')
+        self.match_tree.pack(side=tk.LEFT, fill="both", expand=True, padx=5, pady=5)
+        self.match_tree.heading('more', text='first set')
+        self.match_tree.heading('data', text='second set')
+        for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
+            self.match_tree.insert(parent='', index=tk.END, values=(data1, data2))
+
+        self.match_tree.bind('<<TreeviewSelect>>', lambda event: select_item(event, self.player_tree))  # todo update
+
+        # bottom frame config
+        self.bottom_frame = ttk.Frame(self.window, width=screen_width * .8, height=screen_height * .5, borderwidth=10,
                                       relief=tk.RIDGE)
         self.bottom_frame.pack_propagate(False)
         self.bottom_frame.pack()
 
-        # player tree config
-        self.player_tree = ttk.Treeview(self.bottom_frame, columns=('some', 'data'), show='headings', height=10,
-                                        padding=80, selectmode='browse')
-        self.player_tree.pack(side=tk.LEFT)
-        self.player_tree.heading('some', text='first_set')
-        self.player_tree.heading('data', text='second_set')
-
-        for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
-            self.player_tree.insert(parent='', index=tk.END, values=(data1, data2))
-
-        # add button
-        add_button = ttk.Button(self.window, text="Add Children", command=self.add_children)
-        add_button.pack()
-
-        self.player_tree.bind('<<TreeviewSelect>>', lambda event: select_item(event, self.player_tree))
-
-        self.match_tree = ttk.Treeview(self.bottom_frame, columns=('more', 'data'), show='headings', height=10,
-                                       padding=80, selectmode='browse')
-        self.match_tree.pack(side=tk.RIGHT)
+        self.match_stats_tree = ttk.Treeview(self.bottom_frame,
+                                             columns=('probably', 'going', 'to', 'be', 'lots', 'of', 'columns'),
+                                             show='headings', selectmode='none')
+        self.match_stats_tree.heading('probably', text='probably')
+        self.match_stats_tree.heading('going', text='probably')
+        self.match_stats_tree.heading('to', text='to')
+        self.match_stats_tree.heading('be', text='be')
+        self.match_stats_tree.heading('lots', text='lots')
+        self.match_stats_tree.heading('of', text='of')
+        self.match_stats_tree.heading('columns', text='columns')
+        self.match_stats_tree.pack(fill='both')
 
     def add_children(self):
         selected_items = self.player_tree.selection()
