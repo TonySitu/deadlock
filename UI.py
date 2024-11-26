@@ -140,9 +140,6 @@ class View:  # todo create second tab that searches a player's champion stats op
     def set_previous_player_selection(self, player):
         self.previous_player_selection = player
 
-    def get_match_tree(self) -> ttk.Treeview:
-        return self.match_tree
-
     @staticmethod
     def autofit_treeview_columns(treeview: ttk.Treeview):
         for col in treeview["columns"]:
