@@ -2,11 +2,6 @@ import tkinter as tk
 from UI import View
 
 
-def handle_exit(view: View):
-    print(view.get_window())
-    view.get_window().quit()
-
-
 def handle_entry_click(textfield_string: tk.StringVar, textfield: tk.Entry):
     if textfield_string.get() == View.DEFAULT_INPUT_TEXT:
         textfield_string.set('')

@@ -16,9 +16,6 @@ class Controller:
     def on_focus_out(textfield_string, textfield):
         event.handle_focus_out(textfield_string, textfield)
 
-    def on_exit(self):
-        event.handle_exit(self.view)
-
     def on_player_search(self):
         event.handle_player_search(self.view)
 
