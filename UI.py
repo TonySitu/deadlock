@@ -39,7 +39,7 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.controller = controller
         self.window = tk.Tk()
         self.window.title('Deadlock Tracker')
-        self.window.protocol('WM_DELETE_WINDOW', lambda: self.window.quit())
+        self.window.protocol('WM_DELETE_WINDOW', lambda: self.controller.on_exit())
 
         # init screen size
         screen_width = self.window.winfo_screenwidth()
@@ -128,6 +128,9 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.match_stats_tree.heading('columns', text='columns')
         self.autofit_treeview_columns(self.match_stats_tree)
         self.match_stats_tree.pack(fill='both')
+
+    def get_window(self):
+        return self.window
 
     def get_notebook(self) -> ttk.Notebook:
         return self.notebook

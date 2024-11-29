@@ -8,6 +8,9 @@ class Controller:
     def add_view(self, view: View):
         self.view = view
 
+    def on_exit(self):
+        event.handle_exit(self.view)
+
     @staticmethod
     def on_entry_click(textfield_string, textfield):
         event.handle_entry_click(textfield_string, textfield)
