@@ -29,6 +29,11 @@ class View:  # todo create second tab that searches a player's champion stats op
     textfield_string = None
     input_button = None
     menu = None
+    second_top_frame = None
+    second_middle_frame = None
+    second_bottom_frame = None
+    hero_tree = None
+    hero_stats_tree = None
 
     def __init__(self, controller):
         self.controller = controller
@@ -56,6 +61,7 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.tab2 = ttk.Frame(self.notebook)
         self.notebook.add(self.tab1, text='Tab1')
         self.notebook.add(self.tab2, text='Tab2')
+        self.notebook.bind("<<NotebookTabChanged>>", lambda event: self.controller.on_tab_changed())
         self.notebook.pack()
 
         # init top frame
@@ -95,7 +101,7 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.match_tree = ttk.Treeview(self.middle_frame, columns=('more', 'data'), show='headings',
                                        selectmode='browse')
 
-        self.match_tree.pack(side=tk.LEFT, fill="both", expand=True, padx=5, pady=5)
+        self.match_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
         self.match_tree.heading('more', text='first set')
         self.match_tree.heading('data', text='second set')
         for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
@@ -121,6 +127,9 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.match_stats_tree.heading('columns', text='columns')
         self.autofit_treeview_columns(self.match_stats_tree)
         self.match_stats_tree.pack(fill='both')
+
+    def get_notebook(self) -> ttk.Notebook:
+        return self.notebook
 
     def get_player_tree(self) -> ttk.Treeview:
         return self.player_tree

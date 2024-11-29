@@ -22,6 +22,9 @@ class Controller:
     def on_match_search(self):
         event.handle_match_search(self.view)
 
+    def on_tab_changed(self):
+        event.handle_tab_change(self.view)
+
 
 def main():
     controller = Controller()

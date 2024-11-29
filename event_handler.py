@@ -46,6 +46,15 @@ def handle_match_search(view):
     print('match search')
 
 
+def handle_tab_change(view):
+    selected_tab = view.get_notebook().select()
+    player_tree = view.get_player_tree()
+    player_tree.pack_forget()
+
+    player_tree.master = selected_tab
+    player_tree.pack(fill=tk.BOTH, expand=True)
+
+
 def select_item(_, table):
     print(table.selection())
     for i in table.selection():
