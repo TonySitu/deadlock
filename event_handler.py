@@ -3,7 +3,6 @@ from UI import View
 
 
 def handle_exit(view):
-    print(view)
     view.get_window().quit()
 
 
@@ -51,13 +50,38 @@ def handle_match_search(view):
     print('match search')
 
 
-def handle_tab_change(view):
+def handle_tab_change(view: View):
     selected_tab = view.get_notebook().select()
-    player_tree = view.get_player_tree()
-    player_tree.pack_forget()
 
-    player_tree.master = selected_tab
-    player_tree.pack(fill=tk.BOTH, expand=True)
+
+def handle_second_player_search(view: View):
+    player_tree = view.get_second_player_tree()
+    current_player = player_tree.selection()
+
+    # handle same player selection
+    if current_player == view.get_second_previous_player_selection():
+        player_tree.selection_set('')
+        view.set_second_previous_player_selection(None)
+        print('second player unselected')
+        return
+
+    view.set_second_previous_player_selection(current_player)
+    print('second player searching')
+
+
+def handle_hero_search(view: View):
+    hero_tree = view.get_hero_tree()
+    current_hero = hero_tree.selection()
+
+    # handle same player selection
+    if current_hero == view.get_previous_player_selection():
+        hero_tree.selection_set('')
+        view.set_previous_player_selection(None)
+        print('hero unselected')
+        return
+
+    view.set_previous_player_selection(current_hero)
+    print('hero searching')
 
 
 def select_item(_, table):

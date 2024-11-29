@@ -30,7 +30,11 @@ class View:  # todo create second tab that searches a player's champion stats op
     input_button = None
     menu = None
     second_top_frame = None
+    second_input_text = None
+    second_input_button = None
     second_middle_frame = None
+    second_player_tree = None
+    second_previous_player_selection = None
     second_bottom_frame = None
     hero_tree = None
     hero_stats_tree = None
@@ -96,7 +100,7 @@ class View:  # todo create second tab that searches a player's champion stats op
         for data in get_sample_data1():
             self.player_tree.insert(parent='', index=tk.END, values=(data,))
 
-        self.player_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_player_search())  # todo update
+        self.player_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_player_search())
 
         # match tree config
         self.match_tree = ttk.Treeview(self.middle_frame, columns=('more', 'data'), show='headings',
@@ -108,7 +112,7 @@ class View:  # todo create second tab that searches a player's champion stats op
         for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
             self.match_tree.insert(parent='', index=tk.END, values=(data1, data2))
 
-        self.match_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_match_search())  # todo update
+        self.match_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_match_search())
 
         # bottom frame config
         self.bottom_frame = ttk.Frame(self.tab1, width=screen_width * .8, height=screen_height * .5, borderwidth=10,
@@ -129,6 +133,54 @@ class View:  # todo create second tab that searches a player's champion stats op
         self.autofit_treeview_columns(self.match_stats_tree)
         self.match_stats_tree.pack(fill='both')
 
+        # second tab top frame
+        self.second_top_frame = ttk.Frame(self.tab2, width=screen_width * .32, height=screen_height * .1)
+        self.second_top_frame.pack_propagate(False)
+
+        self.textfield_string = tk.StringVar(value=self.DEFAULT_INPUT_TEXT)
+        self.second_input_text = tk.Entry(self.second_top_frame, width=60, fg='gray',
+                                          textvariable=self.textfield_string)
+        self.second_input_text.pack(side=tk.LEFT)
+        self.second_input_text.bind("<FocusIn>",
+                                    lambda event: self.controller.on_entry_click(textfield_string=self.textfield_string,
+                                                                                 textfield=self.input_text))
+        self.second_input_text.bind("<FocusOut>",
+                                    lambda event: self.controller.on_focus_out(textfield_string=self.textfield_string,
+                                                                               textfield=self.input_text))
+
+        self.second_input_button = ttk.Button(self.second_top_frame, text='Search Player')
+        self.second_input_button.pack(side=tk.RIGHT)
+        self.second_top_frame.pack()
+
+        # init middle frame
+        self.second_middle_frame = ttk.Frame(self.tab2, width=screen_width * .8, height=screen_height * .3,
+                                             borderwidth=10,
+                                             relief=tk.RIDGE)
+        self.second_middle_frame.pack_propagate(False)
+        self.second_middle_frame.pack()
+
+        # second player tree config
+        self.second_player_tree = ttk.Treeview(self.second_middle_frame, columns=('name',), show='headings',
+                                               selectmode='browse')
+        self.second_player_tree.pack(side=tk.LEFT, fill="both", expand=True, padx=5, pady=5)
+        self.second_player_tree.heading('name', text='Player Name')
+        for data in get_sample_data1():
+            self.second_player_tree.insert(parent='', index=tk.END, values=(data,))
+
+        self.second_player_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_second_player_search())
+
+        # hero tree config
+        self.hero_tree = ttk.Treeview(self.second_middle_frame, columns=('more', 'data'), show='headings',
+                                      selectmode='browse')
+
+        self.hero_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
+        self.hero_tree.heading('more', text='first set')
+        self.hero_tree.heading('data', text='second set')
+        for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
+            self.hero_tree.insert(parent='', index=tk.END, values=(data1, data2))
+
+        self.hero_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_hero_search())
+
     def get_window(self):
         return self.window
 
@@ -138,11 +190,20 @@ class View:  # todo create second tab that searches a player's champion stats op
     def get_player_tree(self) -> ttk.Treeview:
         return self.player_tree
 
+    def get_second_player_tree(self) -> ttk.Treeview:
+        return self.second_player_tree
+
     def get_match_tree(self) -> ttk.Treeview:
         return self.match_tree
 
+    def get_hero_tree(self) -> ttk.Treeview:
+        return self.hero_tree
+
     def get_previous_player_selection(self):
         return self.previous_player_selection
+
+    def get_second_previous_player_selection(self):
+        return self.second_previous_player_selection
 
     def get_previous_match_selection(self):
         return self.previous_match_selection
@@ -152,6 +213,9 @@ class View:  # todo create second tab that searches a player's champion stats op
 
     def set_previous_player_selection(self, player):
         self.previous_player_selection = player
+
+    def set_second_previous_player_selection(self, player):
+        self.second_previous_player_selection = player
 
     @staticmethod
     def autofit_treeview_columns(treeview: ttk.Treeview):

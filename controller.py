@@ -22,8 +22,14 @@ class Controller:
     def on_player_search(self):
         event.handle_player_search(self.view)
 
+    def on_second_player_search(self):
+        event.handle_second_player_search(self.view)
+
     def on_match_search(self):
         event.handle_match_search(self.view)
+
+    def on_hero_search(self):
+        event.handle_hero_search(self.view)
 
     def on_tab_changed(self):
         event.handle_tab_change(self.view)
