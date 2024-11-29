@@ -181,6 +181,26 @@ class View:  # todo create second tab that searches a player's champion stats op
 
         self.hero_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_hero_search())
 
+        # second bottom frame config
+        self.second_bottom_frame = ttk.Frame(self.tab2, width=screen_width * .8, height=screen_height * .5,
+                                             borderwidth=10,
+                                             relief=tk.RIDGE)
+        self.second_bottom_frame.pack_propagate(False)
+        self.second_bottom_frame.pack()
+
+        self.hero_stats_tree = ttk.Treeview(self.second_bottom_frame,
+                                            columns=('probably', 'going', 'to', 'be', 'lots', 'of', 'columns'),
+                                            height=100, show='headings', selectmode='none')
+        self.hero_stats_tree.heading('probably', text='probably')
+        self.hero_stats_tree.heading('going', text='going')
+        self.hero_stats_tree.heading('to', text='to')
+        self.hero_stats_tree.heading('be', text='be')
+        self.hero_stats_tree.heading('lots', text='lots')
+        self.hero_stats_tree.heading('of', text='of')
+        self.hero_stats_tree.heading('columns', text='columns')
+        self.autofit_treeview_columns(self.hero_stats_tree)
+        self.hero_stats_tree.pack(fill='both')
+
     def get_window(self):
         return self.window
 
