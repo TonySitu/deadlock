@@ -64,7 +64,6 @@ def create_tables(cursor):
     cursor.execute("""
         SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_avg_kda';
     """)
-
     if cursor.fetchone() is None:
         cursor.execute("""
             CREATE TRIGGER update_avg_kda
