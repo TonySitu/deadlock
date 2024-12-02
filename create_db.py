@@ -22,9 +22,11 @@ def create_tables(cursor):
         CREATE TABLE IF NOT EXISTS hero_stats (
         player_id INTEGER NOT NULL,
         hero_id INTEGER NOT NULL,
-        hero_winrate REAL NOT NULL,
         avg_kda REAL NOT NULL,
         avg_souls_per_minute REAL NOT NULL,
+        hero_wins INTEGER DEFAULT 0,
+        hero_losses INTEGER DEFAULT 0,
+        hero_winrate REAL DEFAULT 0,
         games_played INTEGER DEFAULT 0,
         PRIMARY KEY (player_id, hero_id),
         FOREIGN KEY (player_id) REFERENCES player(player_id),
@@ -137,6 +139,31 @@ def create_tables(cursor):
                   AND NEW.win_loss = 0;
             END;
         """)
+
+    cursor.execute("""
+        SELECT name FROM sqlite_master WHERE type='trigger' AND name='increment_hero_win_loss';
+    """)
+    if cursor.fetchone() is None:
+        cursor.execute("""
+            CREATE TRIGGER increment_hero_win_loss
+            AFTER INSERT ON match_stats
+            FOR EACH ROW
+            BEGIN
+                UPDATE hero_stats
+                SET hero_wins = hero_wins + 1
+                WHERE player_id = NEW.player_id
+                  AND hero_id = NEW.hero_id
+                  AND NEW.win_loss = 1;
+                  
+                UPDATE hero_stats
+                SET hero_losses = hero_losses + 1
+                WHERE player_id = NEW.player_id
+                  AND hero_id = NEW.hero_id
+                  AND NEW.win_loss = 0;
+            END;
+        """)
+
+    # todo add trigger for update_hero_stats_winrate
 
     cursor.execute("""
         SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_player_winrate';
