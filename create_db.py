@@ -18,12 +18,13 @@ def create_tables(cursor):
         );
     """)
 
+    # todo create a trigger for avg souls per minute
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS hero_stats (
         player_id INTEGER NOT NULL,
         hero_id INTEGER NOT NULL,
         avg_kda REAL NOT NULL,
-        avg_souls_per_minute REAL NOT NULL,
+        avg_souls_per_minute REAL DEFAULT 0,
         hero_wins INTEGER DEFAULT 0,
         hero_losses INTEGER DEFAULT 0,
         hero_winrate REAL DEFAULT 0,
@@ -34,6 +35,7 @@ def create_tables(cursor):
     );
     """)
 
+    # todo think about deleting match table as it is subsumed by match_stats
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS match (
             match_id INTEGER PRIMARY KEY,
