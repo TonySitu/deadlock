@@ -185,7 +185,22 @@ def create_tables(cursor):
             END;
         """)
 
-    # todo add trigger for update_hero_stats_winrate
+    cursor.execute("""
+        SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_hero_stats_winrate'
+    """)
+    if cursor.fetchone() is None:
+        cursor.execute("""
+            CREATE TRIGGER update_hero_stats_winrate 
+            AFTER UPDATE ON hero_stats
+            FOR EACH ROW 
+            BEGIN
+                UPDATE hero_stats
+                SET hero_winrate = (CAST(hero_wins AS REAL) / 
+                    NULLIF(CAST(hero_wins AS REAL) + CAST(hero_losses AS REAL), 0))
+                WHERE player_id = NEW.player_id
+                  AND hero_id = NEW.hero_id;
+            END;
+        """)
 
     cursor.execute("""
         SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_player_winrate';
