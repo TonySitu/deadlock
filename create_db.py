@@ -1,6 +1,7 @@
 import sqlite3
 
 
+# todo make all real round to 2 decimal places
 def create_tables(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS player (
@@ -18,12 +19,11 @@ def create_tables(cursor):
         );
     """)
 
-    # todo create a trigger for avg souls per minute
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS hero_stats (
         player_id INTEGER NOT NULL,
         hero_id INTEGER NOT NULL,
-        avg_kda REAL NOT NULL,
+        avg_kda REAL DEFAULT 0,
         avg_souls_per_minute REAL DEFAULT 0,
         hero_wins INTEGER DEFAULT 0,
         hero_losses INTEGER DEFAULT 0,
@@ -52,7 +52,7 @@ def create_tables(cursor):
             match_deaths INTEGER NOT NULL, 
             match_assists INTEGER NOT NULL,
             match_kda REAL NOT NULL, 
-            souls_per_minute REAL NOT NULL,
+            match_souls_per_minute REAL NOT NULL,
             damage REAL NOT NULL,
             win_loss INTEGER NOT NULL, -- 1 for win, 0 for loss
             player_mmr REAL NOT NULL,
@@ -77,6 +77,27 @@ def create_tables(cursor):
                 SET avg_kda = (
                     SELECT AVG((CAST(match_kills AS REAL) + CAST(match_assists AS REAL)) / 
                                NULLIF(CAST(match_deaths AS REAL), 0))
+                    FROM match_stats
+                    WHERE match_stats.player_id = NEW.player_id
+                      AND match_stats.hero_id = NEW.hero_id
+                )
+                WHERE hero_stats.player_id = NEW.player_id
+                  AND hero_stats.hero_id = NEW.hero_id;
+            END;
+        """)
+
+    cursor.execute("""
+        SELECT name from sqlite_master WHERE type='trigger' AND name='update_avg_spm'; -- spm = souls per minute
+    """)
+    if cursor.fetchone() is None:
+        cursor.execute("""
+            CREATE TRIGGER update_avg_spm
+            AFTER INSERT ON match_stats
+            FOR EACH ROW 
+            BEGIN
+                UPDATE hero_stats
+                SET avg_souls_per_minute = (
+                    SELECT AVG(match_souls_per_minute)
                     FROM match_stats
                     WHERE match_stats.player_id = NEW.player_id
                       AND match_stats.hero_id = NEW.hero_id

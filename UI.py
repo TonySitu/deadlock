@@ -84,7 +84,7 @@ class View:
                                                                         textfield=self.input_text))
 
         self.input_button = ttk.Button(self.top_frame, text='Search Player')
-        self.input_button.pack(side=tk.RIGHT)
+        self.input_button.pack(side=tk.LEFT)
         self.top_frame.pack()
 
         # init middle frame
