@@ -35,14 +35,6 @@ def create_tables(cursor):
     );
     """)
 
-    # todo think about deleting match table as it is subsumed by match_stats
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS match (
-            match_id INTEGER PRIMARY KEY,
-            match_mmr REAL NOT NULL
-        );
-    """)
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS match_stats (
             player_id INTEGER NOT NULL,
@@ -51,11 +43,11 @@ def create_tables(cursor):
             match_kills INTEGER NOT NULL, 
             match_deaths INTEGER NOT NULL, 
             match_assists INTEGER NOT NULL,
-            match_kda REAL NOT NULL, 
             match_souls_per_minute REAL NOT NULL,
-            damage REAL NOT NULL,
+            damage INTEGER NOT NULL,
             win_loss INTEGER NOT NULL, -- 1 for win, 0 for loss
-            player_mmr REAL NOT NULL,
+            match_mmr INTEGER NOT NULL,
+            match_kda REAL DEFAULT 0, 
             PRIMARY KEY (player_id, hero_id, match_id),
             FOREIGN KEY (player_id) REFERENCES player(player_id),
             FOREIGN KEY (hero_id) REFERENCES hero(hero_id),
@@ -76,7 +68,10 @@ def create_tables(cursor):
                 UPDATE hero_stats
                 SET avg_kda = (
                     SELECT AVG((CAST(match_kills AS REAL) + CAST(match_assists AS REAL)) / 
-                               NULLIF(CAST(match_deaths AS REAL), 0))
+                               CASE 
+                                    WHEN CAST(NEW.match_deaths AS REAL) = 0 THEN 1
+                                    ELSE CAST(NEW.match_deaths AS REAL)
+                                END)
                     FROM match_stats
                     WHERE match_stats.player_id = NEW.player_id
                       AND match_stats.hero_id = NEW.hero_id
@@ -118,7 +113,10 @@ def create_tables(cursor):
             BEGIN
                 UPDATE match_stats
                 SET match_kda = (CAST(NEW.match_kills AS REAL) + CAST(NEW.match_assists AS REAL)) / 
-                                NULLIF(CAST(NEW.match_deaths AS REAL), 0)
+                                CASE 
+                                    WHEN CAST(NEW.match_deaths AS REAL) = 0 THEN 1
+                                    ELSE CAST(NEW.match_deaths AS REAL)
+                                END
                 WHERE match_stats.player_id = NEW.player_id
                   AND match_stats.hero_id = NEW.hero_id
                   AND match_stats.match_id = NEW.match_id;

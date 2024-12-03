@@ -1,0 +1,1 @@
+player_id, hero_id, hero_name, match_id, match_mmr, match_souls_per_minute, damage, win_loss, match_kills, match_deaths, match_assists
