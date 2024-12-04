@@ -40,6 +40,7 @@ def create_tables(cursor):
             player_id INTEGER NOT NULL,
             hero_id INTEGER NOT NULL,
             match_id INTEGER NOT NULL,
+            hero_name TEXT NOT NULL,
             match_kills INTEGER NOT NULL, 
             match_deaths INTEGER NOT NULL, 
             match_assists INTEGER NOT NULL,
