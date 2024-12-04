@@ -1,5 +1,11 @@
-player_id, hero_id, hero_name, match_id, match_mmr, match_souls_per_minute, damage, win_loss, match_kills, match_deaths, match_assists
-1000, 1, infernus, 26156841, 1844, 1448, 33321, 1, 6, 1, 18
-1000, 1, infernus, 24097631, 1954, 1444.2, 87665, 0, 12, 8, 21
-1000, 1, infernus, 23945837, 1999, 865.7, 11083, 0, 4, 7, 3
-1000, 1, infernus, 26153523, NULL, 847.9, 18344, 0, 3, 8, 4
+player_id, hero_id, hero_name, match_id, match_mmr, match_souls_per_minute, damage, win_loss, match_kills, match_deaths, match_assists, player_name
+1000, 1, infernus, 26156841, 1844, 1448, 33321, 1, 6, 1, 18, SwimmyJimmy
+1000, 1, infernus, 24097631, 1954, 1444.2, 87665, 0, 12, 8, 21, SwimmyJimmy
+1000, 1, infernus, 23945837, 1999, 865.7, 11083, 0, 4, 7, 3, SwimmyJimmy
+1000, 1, infernus, 26153523, NULL, 847.9, 18344, 0, 3, 8, 4, SwimmyJimmy
+1000, 2, haze, 20805424, NULL, 1594.0, 30230, 1, 23, 4, 7, SwimmyJimmy
+1000, 2, haze, 20265448, NULL, 1372.0, 48261, 1, 17, 2, 9, SwimmyJimmy
+1000, 2, haze, 20167755, NULL, 1242.7, 56035, 0, 17, 6, 10, SwimmyJimmy
+1000, 2, haze, 15236151, NULL, 1392.3, 49487, 1, 20, 6, 15, SwimmyJimmy
+1001, 1, infernus, 29565027, 2459, 1468.0, 48472, 1, 16, 6, 20, Zerggy
+1001, 1, infernus, 29559032, 2677, 1385.3, 24793, 1, 10, 2, 8, Zerggy

@@ -6,8 +6,8 @@ DATABASE = 'deadlock.db'
 
 def insert_player_info(cursor, data) -> None:
     cursor.execute("""
-        INSERT OR IGNORE INTO player (player_id) VALUES (?);
-    """, (data[0],))
+        INSERT OR IGNORE INTO player (player_id, player_name) VALUES (?, ?);
+    """, (data[0], data[11],))
 
 
 def insert_hero_info(cursor, data) -> None:

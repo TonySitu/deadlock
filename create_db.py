@@ -6,6 +6,7 @@ def create_tables(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS player (
             player_id INTEGER PRIMARY KEY,
+            player_name TEXT NOT NULL,
             wins INTEGER DEFAULT 0,
             losses INTEGER DEFAULT 0,
             player_winrate REAL DEFAULT 0
