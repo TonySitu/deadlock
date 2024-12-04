@@ -54,7 +54,6 @@ def main():
                 insert_hero_info(cursor, separated_values)
                 insert_hero_stats(cursor, separated_values)
                 insert_match_stats_info(cursor, separated_values)
-
     except FileNotFoundError:
         print('File was not found')
 
