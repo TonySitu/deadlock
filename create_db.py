@@ -46,7 +46,7 @@ def create_tables(cursor):
             match_souls_per_minute REAL NOT NULL,
             damage INTEGER NOT NULL,
             win_loss INTEGER NOT NULL, -- 1 for win, 0 for loss
-            match_mmr INTEGER NOT NULL,
+            match_mmr INTEGER DEFAULT NULL,
             match_kda REAL DEFAULT 0, 
             PRIMARY KEY (player_id, hero_id, match_id),
             FOREIGN KEY (player_id) REFERENCES player(player_id),
