@@ -1,1 +1,5 @@
 player_id, hero_id, hero_name, match_id, match_mmr, match_souls_per_minute, damage, win_loss, match_kills, match_deaths, match_assists
+1000, 1, infernus, 26156841, 1844, 1448, 33321, 1, 6, 1, 18
+1000, 1, infernus, 24097631, 1954, 1444.2, 87665, 0, 12, 8, 21
+1000, 1, infernus, 23945837, 1999, 865.7, 11083, 0, 4, 7, 3
+1000, 1, infernus, 26153523, NULL, 847.9, 18344, 0, 3, 8, 4
