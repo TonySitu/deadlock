@@ -83,7 +83,7 @@ class View:
                              lambda event: self.controller.on_focus_out(textfield_string=self.textfield_string,
                                                                         textfield=self.input_text))
 
-        self.input_button = ttk.Button(self.top_frame, text='Search Player')
+        self.input_button = ttk.Button(self.top_frame, text='Search Player', command=controller.on_button_search())
         self.input_button.pack(side=tk.LEFT)
         self.top_frame.pack()
 
@@ -137,16 +137,18 @@ class View:
         self.second_top_frame = ttk.Frame(self.tab2, width=screen_width * .32, height=screen_height * .1)
         self.second_top_frame.pack_propagate(False)
 
-        self.textfield_string = tk.StringVar(value=self.DEFAULT_INPUT_TEXT)
+        self.second_textfield_string = tk.StringVar(value=self.DEFAULT_INPUT_TEXT)
         self.second_input_text = tk.Entry(self.second_top_frame, width=60, fg='gray',
-                                          textvariable=self.textfield_string)
+                                          textvariable=self.second_textfield_string)
         self.second_input_text.pack(side=tk.LEFT)
         self.second_input_text.bind("<FocusIn>",
-                                    lambda event: self.controller.on_entry_click(textfield_string=self.textfield_string,
-                                                                                 textfield=self.input_text))
+                                    lambda event: self.controller.
+                                    on_entry_click(textfield_string=self.second_textfield_string,
+                                                   textfield=self.second_input_text))
         self.second_input_text.bind("<FocusOut>",
-                                    lambda event: self.controller.on_focus_out(textfield_string=self.textfield_string,
-                                                                               textfield=self.input_text))
+                                    lambda event: self.controller.on_focus_out(
+                                        textfield_string=self.second_textfield_string,
+                                        textfield=self.second_input_text))
 
         self.second_input_button = ttk.Button(self.second_top_frame, text='Search Player')
         self.second_input_button.pack(side=tk.RIGHT)
