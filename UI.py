@@ -88,8 +88,7 @@ class View:
         self.top_frame.pack()
 
         # init middle frame
-        self.middle_frame = ttk.Frame(self.tab1, width=screen_width * .8, height=screen_height * .3, borderwidth=10,
-                                      relief=tk.RIDGE)
+        self.middle_frame = ttk.Frame(self.tab1, width=screen_width * .8, height=screen_height * .3, borderwidth=10)
         self.middle_frame.pack_propagate(False)
         self.middle_frame.pack()
 
@@ -115,21 +114,21 @@ class View:
         self.match_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_match_search())
 
         # bottom frame config
-        self.bottom_frame = ttk.Frame(self.tab1, width=screen_width * .8, height=screen_height * .5, borderwidth=10,
-                                      relief=tk.RIDGE)
+        self.bottom_frame = ttk.Frame(self.tab1, width=screen_width * .8, height=screen_height * .3, borderwidth=10)
         self.bottom_frame.pack_propagate(False)
         self.bottom_frame.pack()
 
         self.match_stats_tree = ttk.Treeview(self.bottom_frame,
-                                             columns=('probably', 'going', 'to', 'be', 'lots', 'of', 'columns'),
+                                             columns=('name', 'mmr', 'kills', 'deaths', 'assists', 'kda', 'spm', 'win'),
                                              height=100, show='headings', selectmode='none')
-        self.match_stats_tree.heading('probably', text='probably')
-        self.match_stats_tree.heading('going', text='going')
-        self.match_stats_tree.heading('to', text='to')
-        self.match_stats_tree.heading('be', text='be')
-        self.match_stats_tree.heading('lots', text='lots')
-        self.match_stats_tree.heading('of', text='of')
-        self.match_stats_tree.heading('columns', text='columns')
+        self.match_stats_tree.heading('name', text='hero_name')
+        self.match_stats_tree.heading('mmr', text='MMR')
+        self.match_stats_tree.heading('kills', text='kills')
+        self.match_stats_tree.heading('deaths', text='deaths')
+        self.match_stats_tree.heading('assists', text='assists')
+        self.match_stats_tree.heading('kda', text='KDA')
+        self.match_stats_tree.heading('spm', text='Souls per minute')
+        self.match_stats_tree.heading('win', text='Win (1) Loss (0)')
         self.autofit_treeview_columns(self.match_stats_tree)
         self.match_stats_tree.pack(fill='both')
 
@@ -191,15 +190,16 @@ class View:
         self.second_bottom_frame.pack()
 
         self.hero_stats_tree = ttk.Treeview(self.second_bottom_frame,
-                                            columns=('probably', 'going', 'to', 'be', 'lots', 'of', 'columns'),
+                                            columns=('name', 'mmr', 'kills', 'deaths', 'assists', 'kda', 'spm', 'win'),
                                             height=100, show='headings', selectmode='none')
-        self.hero_stats_tree.heading('probably', text='probably')
-        self.hero_stats_tree.heading('going', text='going')
-        self.hero_stats_tree.heading('to', text='to')
-        self.hero_stats_tree.heading('be', text='be')
-        self.hero_stats_tree.heading('lots', text='lots')
-        self.hero_stats_tree.heading('of', text='of')
-        self.hero_stats_tree.heading('columns', text='columns')
+        self.hero_stats_tree.heading('name', text='hero_name')
+        self.hero_stats_tree.heading('mmr', text='MMR')
+        self.hero_stats_tree.heading('kills', text='kills')
+        self.hero_stats_tree.heading('deaths', text='deaths')
+        self.hero_stats_tree.heading('assists', text='assists')
+        self.hero_stats_tree.heading('kda', text='KDA')
+        self.hero_stats_tree.heading('spm', text='Souls per minute')
+        self.hero_stats_tree.heading('win', text='Win (1) Loss (0)')
         self.autofit_treeview_columns(self.hero_stats_tree)
         self.hero_stats_tree.pack(fill='both')
 

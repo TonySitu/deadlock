@@ -97,6 +97,36 @@ def query_player_matches(player_id: str) -> list[dict]:
     return match_list
 
 
+def query_match(player_id: str, hero_id: str, match_id: str) -> list[dict]:
+    DATABASE = 'deadlock.db'
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+    match_list = []
+
+    cursor.execute("""
+            SELECT 
+                match_stats.match_mmr, 
+                match_stats.match_kills, 
+                match_stats.match_deaths, 
+                match_stats.match_assists, 
+                match_stats.match_kda,
+                match_stats.match_souls_per_minute,
+                match_stats.win_loss,
+                hero.hero_name
+            FROM match_stats
+            JOIN hero ON match_stats.hero_id = hero.hero_id
+            WHERE player_id = ? AND match_stats.hero_id = ? AND match_id = ?;
+       """, (player_id, hero_id, match_id,))
+
+    rows = cursor.fetchall()
+    column_names = [description[0] for description in cursor.description]
+    for row in rows:
+        match_list.append(dict(zip(column_names, row)))
+    connection.close()
+
+    return match_list
+
+
 def handle_button_search(view: View):
     player = view.get_textfield_string().get()
 
@@ -128,7 +158,7 @@ def handle_player_search(view: View):
         return
 
     view.set_previous_player_selection(current_player)
-    match_tree = view.get_match_tree()
+    view.get_match_tree()
 
     player_id = player_tree.focus()
     match_list = query_player_matches(player_id)
@@ -158,6 +188,19 @@ def handle_match_search(view):
     iid = match_tree.focus()
     player_id = view.get_player_tree().focus()
     hero_id, match_id = map(int, iid.split('_'))
+    match_list = query_match(player_id, hero_id, match_id)
+    match_stats_tree = view.get_match_stats_tree()
+    clear_treeview(match_stats_tree)
+    for match in match_list:
+        match_stats_tree.insert(parent='', index=tk.END,
+                                values=(match['hero_name'],
+                                        match['match_mmr'],
+                                        match['match_kills'],
+                                        match['match_deaths'],
+                                        match['match_assists'],
+                                        match['match_kda'],
+                                        match['match_souls_per_minute'],
+                                        match['win_loss'],))
 
     print('match search')
 
