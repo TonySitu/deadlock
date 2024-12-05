@@ -43,8 +43,6 @@ def query_all_players() -> list:
     for row in rows:
         player_list.append(dict(zip(column_names, row)))
 
-    for player in player_list:
-        print(player)
     connection.close()
 
     return player_list
@@ -67,8 +65,6 @@ def query_specific_player(player_name: str) -> list[dict]:
     for row in rows:
         player_list.append(dict(zip(column_names, row)))
 
-    for player in player_list:
-        print(player)
     connection.close()
 
     return player_list
@@ -96,9 +92,6 @@ def query_player_matches(player_id: str) -> list[dict]:
     column_names = [description[0] for description in cursor.description]
     for row in rows:
         match_list.append(dict(zip(column_names, row)))
-
-    for match in match_list:
-        print(match)
     connection.close()
 
     return match_list
