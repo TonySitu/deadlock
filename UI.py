@@ -224,6 +224,9 @@ class View:
     def get_match_tree(self) -> ttk.Treeview:
         return self.match_tree
 
+    def get_match_stats_tree(self) -> ttk.Treeview:
+        return self.match_stats_tree
+
     def get_hero_tree(self) -> ttk.Treeview:
         return self.hero_tree
 

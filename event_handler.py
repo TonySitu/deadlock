@@ -114,6 +114,8 @@ def handle_button_search(view: View):
 
     player_tree = view.get_player_tree()
     clear_treeview(player_tree)
+    clear_treeview(view.get_match_tree())
+    clear_treeview(view.get_match_stats_tree())
 
     for player in player_list:
         player_tree.insert(parent='', index=tk.END, iid=player['player_id'], values=(player['player_name'],))
