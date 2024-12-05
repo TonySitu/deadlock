@@ -163,10 +163,6 @@ def handle_match_search(view):
     print('match search')
 
 
-def handle_tab_change(view: View):
-    selected_tab = view.get_notebook().select()  # todo consider removing
-
-
 def handle_second_player_search(view: View):
     player_tree = view.get_second_player_tree()
     current_player = player_tree.selection()
