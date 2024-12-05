@@ -149,7 +149,8 @@ class View:
                                         textfield_string=self.second_textfield_string,
                                         textfield=self.second_input_text))
 
-        self.second_input_button = ttk.Button(self.second_top_frame, text='Search Player')
+        self.second_input_button = ttk.Button(self.second_top_frame, text='Search Player',
+                                              command=lambda: controller.on_second_button_search())
         self.second_input_button.pack(side=tk.RIGHT)
         self.second_top_frame.pack()
 
@@ -171,14 +172,13 @@ class View:
         self.second_player_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_second_player_search())
 
         # hero tree config
-        self.hero_tree = ttk.Treeview(self.second_middle_frame, columns=('more', 'data'), show='headings',
+        self.hero_tree = ttk.Treeview(self.second_middle_frame, columns='data', show='headings',
                                       selectmode='browse')
 
         self.hero_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
-        self.hero_tree.heading('more', text='more')
-        self.hero_tree.heading('data', text='data')
+        self.hero_tree.heading('data', text='Heroes')
         for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
-            self.hero_tree.insert(parent='', index=tk.END, values=(data1, data2))
+            self.hero_tree.insert(parent='', index=tk.END, values=data1)
 
         self.hero_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_hero_search())
 
@@ -229,6 +229,9 @@ class View:
 
     def get_hero_tree(self) -> ttk.Treeview:
         return self.hero_tree
+
+    def get_hero_stats_tree(self) -> ttk.Treeview:
+        return self.hero_stats_tree
 
     def get_previous_player_selection(self):
         return self.previous_player_selection

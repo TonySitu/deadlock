@@ -14,6 +14,9 @@ class Controller:
     def on_button_search(self):
         event.handle_button_search(self.view)
 
+    def on_second_button_search(self):
+        event.handle_second_button_search(self.view)
+
     def on_player_search(self):
         event.handle_player_search(self.view)
 

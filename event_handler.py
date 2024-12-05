@@ -127,6 +127,29 @@ def query_match(player_id: str, hero_id: str, match_id: str) -> list[dict]:
     return match_list
 
 
+def query_hero_list(player_id: str) -> list[dict]:
+    DATABASE = 'deadlock.db'
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+    hero_list = []
+
+    cursor.execute("""
+                SELECT 
+                    hero.hero_name, hero.hero_id
+                FROM hero
+                JOIN hero_stats ON hero.hero_id = hero_stats.hero_id
+                WHERE player_id = ?
+           """, (player_id,))
+
+    rows = cursor.fetchall()
+    column_names = [description[0] for description in cursor.description]
+    for row in rows:
+        hero_list.append(dict(zip(column_names, row)))
+    connection.close()
+
+    return hero_list
+
+
 def handle_button_search(view: View):
     player = view.get_textfield_string().get()
 
@@ -139,6 +162,25 @@ def handle_button_search(view: View):
     clear_treeview(player_tree)
     clear_treeview(view.get_match_tree())
     clear_treeview(view.get_match_stats_tree())
+
+    for player in player_list:
+        player_tree.insert(parent='', index=tk.END, iid=player['player_id'], values=(player['player_name'],))
+
+    print('button searching')
+
+
+def handle_second_button_search(view: View):
+    player = view.get_second_textfield_string().get()
+
+    if player == '' or player == View.DEFAULT_INPUT_TEXT:
+        player_list = query_all_players()
+    else:
+        player_list = query_specific_player(player)
+
+    player_tree = view.get_second_player_tree()
+    clear_treeview(player_tree)
+    clear_treeview(view.get_hero_tree())
+    clear_treeview(view.get_hero_stats_tree())
 
     for player in player_list:
         player_tree.insert(parent='', index=tk.END, iid=player['player_id'], values=(player['player_name'],))
@@ -216,6 +258,15 @@ def handle_second_player_search(view: View):
         return
 
     view.set_second_previous_player_selection(current_player)
+
+    player_id = player_tree.focus()
+    hero_list = query_hero_list(player_id)
+    hero_tree = view.get_hero_tree()
+    clear_treeview(hero_tree)
+    for hero in hero_list:
+        iid = hero['hero_id']
+        hero_tree.insert(parent='', index=tk.END,
+                         iid=iid, values=(hero['hero_name'],))
     print('second player searching')
 
 
