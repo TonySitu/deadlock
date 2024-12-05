@@ -36,14 +36,3 @@ class Controller:
 
     def on_tab_changed(self):
         event.handle_tab_change(self.view)
-
-
-def main():
-    controller = Controller()
-    view = View(controller)
-    controller.add_view(view)
-    view.run()
-
-
-if __name__ == "__main__":
-    main()

@@ -1,5 +1,6 @@
 import tkinter as tk
 from UI import View
+import sqlite3
 
 
 def handle_exit(view):
@@ -20,7 +21,73 @@ def handle_focus_out(textfield_string: tk.StringVar, textfield: tk.Entry):
         print('focus out')
 
 
+def clear_treeview(tree):
+    for item in tree.get_children():
+        tree.delete(item)
+
+
+def query_all_players() -> list:
+    DATABASE = 'deadlock.db'
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+    player_list = []
+
+    cursor.execute("""
+        SELECT * FROM PLAYER;
+    """)
+
+    rows = cursor.fetchall()
+    column_names = [description[0] for description in cursor.description]
+    print(column_names)
+
+    for row in rows:
+        player_list.append(dict(zip(column_names, row)))
+
+    for player in player_list:
+        print(player)
+    connection.close()
+
+    return player_list
+
+
+def query_specific_player(player_name: str) -> list:
+    DATABASE = 'deadlock.db'
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+    player_list = []
+
+    cursor.execute("""
+        SELECT player_id, player_name
+        FROM player
+        WHERE player_name = ?
+    """, (player_name,))
+
+    rows = cursor.fetchall()
+    column_names = [description[0] for description in cursor.description]
+    for row in rows:
+        player_list.append(dict(zip(column_names, row)))
+
+    for player in player_list:
+        print(player)
+    connection.close()
+
+    return player_list
+
+
 def handle_button_search(view: View):
+    player = view.get_textfield_string().get()
+
+    if player == '' or player == View.DEFAULT_INPUT_TEXT:
+        player_list = query_all_players()
+    else:
+        player_list = query_specific_player(player)
+
+    player_tree = view.get_player_tree()
+    clear_treeview(player_tree)
+
+    for player in player_list:
+        player_tree.insert(parent='', index=tk.END, iid=player['player_id'], values=(player['player_name'],))
+
     print('button searching')
 
 

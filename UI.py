@@ -83,7 +83,8 @@ class View:
                              lambda event: self.controller.on_focus_out(textfield_string=self.textfield_string,
                                                                         textfield=self.input_text))
 
-        self.input_button = ttk.Button(self.top_frame, text='Search Player', command=controller.on_button_search())
+        self.input_button = ttk.Button(self.top_frame, text='Search Player',
+                                       command=lambda: controller.on_button_search())
         self.input_button.pack(side=tk.LEFT)
         self.top_frame.pack()
 
@@ -208,6 +209,12 @@ class View:
 
     def get_notebook(self) -> ttk.Notebook:
         return self.notebook
+
+    def get_textfield_string(self) -> tk.StringVar:
+        return self.textfield_string
+
+    def get_second_textfield_string(self) -> tk.StringVar:
+        return self.second_textfield_string
 
     def get_player_tree(self) -> ttk.Treeview:
         return self.player_tree
