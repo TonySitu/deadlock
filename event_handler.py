@@ -87,9 +87,9 @@ def query_player_matches(player_id: str) -> list[dict]:
                 match_stats.hero_id, 
                 match_stats.match_kda, 
                 hero.hero_name
-           FROM match_stats
-           JOIN hero ON match_stats.hero_id = hero.hero_id
-           WHERE player_id = ?
+            FROM match_stats
+            JOIN hero ON match_stats.hero_id = hero.hero_id
+            WHERE player_id = ?
        """, (player_id,))
 
     rows = cursor.fetchall()
