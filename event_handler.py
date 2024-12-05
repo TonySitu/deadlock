@@ -128,17 +128,16 @@ def handle_player_search(view: View):
         return
 
     view.set_previous_player_selection(current_player)
+    match_tree = view.get_match_tree()
 
-    selected_item = player_tree.focus()
-    if selected_item:  # Ensure something is selected
-        player_id = selected_item
-        match_list = query_player_matches(player_id)
-        match_tree = view.get_match_tree()
-        clear_treeview(match_tree)
-        for match in match_list:
-            iid = f"{match['hero_id']}_{match['match_id']}"
-            match_tree.insert(parent='', index=tk.END,
-                              iid=iid, values=(match['hero_name'], match['match_kda'],))
+    player_id = player_tree.focus()
+    match_list = query_player_matches(player_id)
+    match_tree = view.get_match_tree()
+    clear_treeview(match_tree)
+    for match in match_list:
+        iid = f"{match['hero_id']}_{match['match_id']}"
+        match_tree.insert(parent='', index=tk.END,
+                          iid=iid, values=(match['hero_name'], match['match_kda'],))
 
     print('player searching')
 
@@ -155,6 +154,11 @@ def handle_match_search(view):
         return
 
     view.set_previous_match_selection(current_match)
+
+    iid = match_tree.focus()
+    player_id = view.get_player_tree().focus()
+    hero_id, match_id = map(int, iid.split('_'))
+
     print('match search')
 
 
