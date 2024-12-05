@@ -49,7 +49,6 @@ class View:
         # init screen size
         screen_width = self.window.winfo_screenwidth()
         screen_height = self.window.winfo_screenheight()
-        print(f'x:{screen_width} y:{screen_height}')
         self.window.geometry(f"{screen_width}x{screen_height}+0+0")
         self.window.state('zoomed')
         self.window.bind('<Escape>', lambda event: self.window.quit())
