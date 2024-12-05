@@ -57,7 +57,7 @@ class View:
         self.menu = tk.Menu(self.menu, tearoff=False)
         self.window.configure(menu=self.menu)
         add_menu = tk.Menu(self.menu, tearoff=False)
-        add_menu.add_command(label='Add', command=lambda: None)  # todo add method to add matches
+        add_menu.add_command(label='Add', command=lambda: None)  # todo remove menu
         self.menu.add_cascade(label='Add Match', menu=add_menu)
 
         # tab config
@@ -177,8 +177,8 @@ class View:
                                       selectmode='browse')
 
         self.hero_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
-        self.hero_tree.heading('more', text='first set')
-        self.hero_tree.heading('data', text='second set')
+        self.hero_tree.heading('more', text='Hero')
+        self.hero_tree.heading('data', text='KDA')
         for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
             self.hero_tree.insert(parent='', index=tk.END, values=(data1, data2))
 

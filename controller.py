@@ -11,14 +11,6 @@ class Controller:
     def on_exit(self):
         event.handle_exit(self.view)
 
-    @staticmethod
-    def on_entry_click(textfield_string, textfield):
-        event.handle_entry_click(textfield_string, textfield)
-
-    @staticmethod
-    def on_focus_out(textfield_string, textfield):
-        event.handle_focus_out(textfield_string, textfield)
-
     def on_button_search(self):
         event.handle_button_search(self.view)
 
@@ -36,3 +28,11 @@ class Controller:
 
     def on_tab_changed(self):
         event.handle_tab_change(self.view)
+
+    @staticmethod
+    def on_entry_click(textfield_string, textfield):
+        event.handle_entry_click(textfield_string, textfield)
+
+    @staticmethod
+    def on_focus_out(textfield_string, textfield):
+        event.handle_focus_out(textfield_string, textfield)

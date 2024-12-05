@@ -50,7 +50,7 @@ def query_all_players() -> list:
     return player_list
 
 
-def query_specific_player(player_name: str) -> list:
+def query_specific_player(player_name: str) -> list[dict]:
     DATABASE = 'deadlock.db'
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
@@ -72,6 +72,36 @@ def query_specific_player(player_name: str) -> list:
     connection.close()
 
     return player_list
+
+
+def query_player_matches(player_id: str) -> list[dict]:
+    DATABASE = 'deadlock.db'
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+    match_list = []
+
+    cursor.execute("""
+            SELECT 
+                match_stats.player_id, 
+                match_stats.match_id, 
+                match_stats.hero_id, 
+                match_stats.match_kda, 
+                hero.hero_name
+           FROM match_stats
+           JOIN hero ON match_stats.hero_id = hero.hero_id
+           WHERE player_id = ?
+       """, (player_id,))
+
+    rows = cursor.fetchall()
+    column_names = [description[0] for description in cursor.description]
+    for row in rows:
+        match_list.append(dict(zip(column_names, row)))
+
+    for match in match_list:
+        print(match)
+    connection.close()
+
+    return match_list
 
 
 def handle_button_search(view: View):
@@ -103,26 +133,37 @@ def handle_player_search(view: View):
         return
 
     view.set_previous_player_selection(current_player)
+
+    selected_item = player_tree.focus()
+    if selected_item:  # Ensure something is selected
+        player_id = selected_item
+        match_list = query_player_matches(player_id)
+        match_tree = view.get_match_tree()
+        clear_treeview(match_tree)
+        for match in match_list:
+            match_tree.insert(parent='', index=tk.END,
+                              iid=match['match_id'], values=(match['hero_name'], match['match_kda'],))
+
     print('player searching')
 
 
 def handle_match_search(view):
     match_tree = view.get_match_tree()
-    current_player = match_tree.selection()
+    current_match = match_tree.selection()
 
     # handle same match selection
-    if current_player == view.get_previous_match_selection():
+    if current_match == view.get_previous_match_selection():
         match_tree.selection_set('')
         view.set_previous_match_selection(None)
         print('match unselected')
         return
 
-    view.set_previous_match_selection(current_player)
+    view.set_previous_match_selection(current_match)
     print('match search')
 
 
 def handle_tab_change(view: View):
-    selected_tab = view.get_notebook().select()
+    selected_tab = view.get_notebook().select()  # todo consider removing
 
 
 def handle_second_player_search(view: View):
