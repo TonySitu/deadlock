@@ -158,7 +158,6 @@ def handle_player_search(view: View):
         return
 
     view.set_previous_player_selection(current_player)
-    view.get_match_tree()
 
     player_id = player_tree.focus()
     match_list = query_player_matches(player_id)
