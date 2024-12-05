@@ -141,8 +141,9 @@ def handle_player_search(view: View):
         match_tree = view.get_match_tree()
         clear_treeview(match_tree)
         for match in match_list:
+            iid = f"{match['hero_id']}_{match['match_id']}"
             match_tree.insert(parent='', index=tk.END,
-                              iid=match['match_id'], values=(match['hero_name'], match['match_kda'],))
+                              iid=iid, values=(match['hero_name'], match['match_kda'],))
 
     print('player searching')
 

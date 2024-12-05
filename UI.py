@@ -108,8 +108,8 @@ class View:
                                        selectmode='browse')
 
         self.match_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
-        self.match_tree.heading('more', text='first set')
-        self.match_tree.heading('data', text='second set')
+        self.match_tree.heading('more', text='Hero')
+        self.match_tree.heading('data', text='KDA')
         for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
             self.match_tree.insert(parent='', index=tk.END, values=(data1, data2))
 
@@ -177,8 +177,8 @@ class View:
                                       selectmode='browse')
 
         self.hero_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
-        self.hero_tree.heading('more', text='Hero')
-        self.hero_tree.heading('data', text='KDA')
+        self.hero_tree.heading('more', text='more')
+        self.hero_tree.heading('data', text='data')
         for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
             self.hero_tree.insert(parent='', index=tk.END, values=(data1, data2))
 
