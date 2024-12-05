@@ -30,6 +30,7 @@ class View:
     input_button = None
     menu = None
     second_top_frame = None
+    second_textfield_string = None
     second_input_text = None
     second_input_button = None
     second_middle_frame = None
@@ -66,7 +67,6 @@ class View:
         self.tab2 = ttk.Frame(self.notebook)
         self.notebook.add(self.tab1, text='Tab1')
         self.notebook.add(self.tab2, text='Tab2')
-        self.notebook.bind("<<NotebookTabChanged>>", lambda event: self.controller.on_tab_changed())
         self.notebook.pack()
 
         # init top frame

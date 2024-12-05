@@ -26,9 +26,6 @@ class Controller:
     def on_hero_search(self):
         event.handle_hero_search(self.view)
 
-    def on_tab_changed(self):
-        event.handle_tab_change(self.view)
-
     @staticmethod
     def on_entry_click(textfield_string, textfield):
         event.handle_entry_click(textfield_string, textfield)
