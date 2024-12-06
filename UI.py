@@ -121,11 +121,11 @@ class View:
         self.match_stats_tree = ttk.Treeview(self.bottom_frame,
                                              columns=('name', 'mmr', 'kills', 'deaths', 'assists', 'kda', 'spm', 'win'),
                                              height=100, show='headings', selectmode='none')
-        self.match_stats_tree.heading('name', text='hero_name')
+        self.match_stats_tree.heading('name', text='Hero Name')
         self.match_stats_tree.heading('mmr', text='MMR')
-        self.match_stats_tree.heading('kills', text='kills')
-        self.match_stats_tree.heading('deaths', text='deaths')
-        self.match_stats_tree.heading('assists', text='assists')
+        self.match_stats_tree.heading('kills', text='Kills')
+        self.match_stats_tree.heading('deaths', text='Deaths')
+        self.match_stats_tree.heading('assists', text='Assists')
         self.match_stats_tree.heading('kda', text='KDA')
         self.match_stats_tree.heading('spm', text='Souls per minute')
         self.match_stats_tree.heading('win', text='Win (1) Loss (0)')
@@ -155,9 +155,7 @@ class View:
         self.second_top_frame.pack()
 
         # init middle frame
-        self.second_middle_frame = ttk.Frame(self.tab2, width=screen_width * .8, height=screen_height * .3,
-                                             borderwidth=10,
-                                             relief=tk.RIDGE)
+        self.second_middle_frame = ttk.Frame(self.tab2, width=screen_width * .8, height=screen_height * .3)
         self.second_middle_frame.pack_propagate(False)
         self.second_middle_frame.pack()
 
@@ -183,23 +181,19 @@ class View:
         self.hero_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_hero_search())
 
         # second bottom frame config
-        self.second_bottom_frame = ttk.Frame(self.tab2, width=screen_width * .8, height=screen_height * .5,
-                                             borderwidth=10,
-                                             relief=tk.RIDGE)
+        self.second_bottom_frame = ttk.Frame(self.tab2, width=screen_width * .8, height=screen_height * .3)
         self.second_bottom_frame.pack_propagate(False)
         self.second_bottom_frame.pack()
 
         self.hero_stats_tree = ttk.Treeview(self.second_bottom_frame,
-                                            columns=('name', 'mmr', 'kills', 'deaths', 'assists', 'kda', 'spm', 'win'),
+                                            columns=('avg_kda', 'spm', 'win', 'losses', 'winrate', 'games_played'),
                                             height=100, show='headings', selectmode='none')
-        self.hero_stats_tree.heading('name', text='hero_name')
-        self.hero_stats_tree.heading('mmr', text='MMR')
-        self.hero_stats_tree.heading('kills', text='kills')
-        self.hero_stats_tree.heading('deaths', text='deaths')
-        self.hero_stats_tree.heading('assists', text='assists')
-        self.hero_stats_tree.heading('kda', text='KDA')
-        self.hero_stats_tree.heading('spm', text='Souls per minute')
-        self.hero_stats_tree.heading('win', text='Win (1) Loss (0)')
+        self.hero_stats_tree.heading('avg_kda', text='Average KDA')
+        self.hero_stats_tree.heading('spm', text='Avg Souls per minute')
+        self.hero_stats_tree.heading('win', text='Total Wins')
+        self.hero_stats_tree.heading('losses', text='Total Losses')
+        self.hero_stats_tree.heading('winrate', text='Winrate')
+        self.hero_stats_tree.heading('games_played', text='Games played')
         self.autofit_treeview_columns(self.hero_stats_tree)
         self.hero_stats_tree.pack(fill='both')
 

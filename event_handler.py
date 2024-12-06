@@ -150,6 +150,33 @@ def query_hero_list(player_id: str) -> list[dict]:
     return hero_list
 
 
+def query_hero_stats(player_id: str, hero_id: str) -> list[dict]:
+    DATABASE = 'deadlock.db'
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+    hero_stats_list = []
+
+    cursor.execute("""
+                    SELECT 
+                        hero_stats.avg_kda, 
+                        hero_stats.avg_souls_per_minute, 
+                        hero_stats.hero_wins, 
+                        hero_stats.hero_losses, 
+                        hero_stats.hero_winrate,
+                        hero_stats.games_played
+                    FROM hero_stats
+                    WHERE hero_stats.player_id = ? AND hero_stats.hero_id = ?;
+               """, (player_id, hero_id,))
+
+    rows = cursor.fetchall()
+    column_names = [description[0] for description in cursor.description]
+    for row in rows:
+        hero_stats_list.append(dict(zip(column_names, row)))
+    connection.close()
+
+    return hero_stats_list
+
+
 def handle_button_search(view: View):
     player = view.get_textfield_string().get()
 
@@ -231,10 +258,10 @@ def handle_match_search(view):
     if iid:
         player_id = view.get_player_tree().focus()
         hero_id, match_id = map(int, iid.split('_'))
-        match_list = query_match(player_id, hero_id, match_id)
+        match_stats_list = query_match(player_id, hero_id, match_id)
         match_stats_tree = view.get_match_stats_tree()
         clear_treeview(match_stats_tree)
-        for match in match_list:
+        for match in match_stats_list:
             match_stats_tree.insert(parent='', index=tk.END,
                                     values=(match['hero_name'],
                                             match['match_mmr'],
@@ -268,7 +295,7 @@ def handle_second_player_search(view: View):
         clear_treeview(hero_tree)
         clear_treeview(view.get_hero_stats_tree())
         for hero in hero_list:
-            iid = hero['hero_id']
+            iid = f"{player_id}_{hero['hero_id']}"
             hero_tree.insert(parent='', index=tk.END,
                              iid=iid, values=(hero['hero_name'],))
 
@@ -287,10 +314,20 @@ def handle_hero_search(view: View):
         return
 
     view.set_previous_player_selection(current_hero)
-    print('hero searching')
 
+    iid = hero_tree.focus()
+    if iid:
+        player_id, hero_id = map(int, iid.split('_'))
+        hero_stats_list = query_hero_stats(player_id, hero_id)
+        hero_stats_tree = view.get_hero_stats_tree()
+        clear_treeview(hero_stats_tree)
+        for match in hero_stats_list:
+            hero_stats_tree.insert(parent='', index=tk.END,
+                                   values=(match['avg_kda'],
+                                           match['avg_souls_per_minute'],
+                                           match['hero_wins'],
+                                           match['hero_losses'],
+                                           match['hero_winrate'],
+                                           match['games_played'],))
 
-def select_item(_, table):
-    print(table.selection())
-    for i in table.selection():
-        print(table.item(i))
+        print('hero searching')
