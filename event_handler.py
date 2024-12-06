@@ -205,6 +205,7 @@ def handle_player_search(view: View):
     match_list = query_player_matches(player_id)
     match_tree = view.get_match_tree()
     clear_treeview(match_tree)
+    clear_treeview(view.get_match_stats_tree())
     for match in match_list:
         iid = f"{match['hero_id']}_{match['match_id']}"
         match_tree.insert(parent='', index=tk.END,
@@ -227,23 +228,24 @@ def handle_match_search(view):
     view.set_previous_match_selection(current_match)
 
     iid = match_tree.focus()
-    player_id = view.get_player_tree().focus()
-    hero_id, match_id = map(int, iid.split('_'))
-    match_list = query_match(player_id, hero_id, match_id)
-    match_stats_tree = view.get_match_stats_tree()
-    clear_treeview(match_stats_tree)
-    for match in match_list:
-        match_stats_tree.insert(parent='', index=tk.END,
-                                values=(match['hero_name'],
-                                        match['match_mmr'],
-                                        match['match_kills'],
-                                        match['match_deaths'],
-                                        match['match_assists'],
-                                        match['match_kda'],
-                                        match['match_souls_per_minute'],
-                                        match['win_loss'],))
+    if iid:
+        player_id = view.get_player_tree().focus()
+        hero_id, match_id = map(int, iid.split('_'))
+        match_list = query_match(player_id, hero_id, match_id)
+        match_stats_tree = view.get_match_stats_tree()
+        clear_treeview(match_stats_tree)
+        for match in match_list:
+            match_stats_tree.insert(parent='', index=tk.END,
+                                    values=(match['hero_name'],
+                                            match['match_mmr'],
+                                            match['match_kills'],
+                                            match['match_deaths'],
+                                            match['match_assists'],
+                                            match['match_kda'],
+                                            match['match_souls_per_minute'],
+                                            match['win_loss'],))
 
-    print('match search')
+        print('match search')
 
 
 def handle_second_player_search(view: View):
