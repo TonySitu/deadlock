@@ -45,13 +45,6 @@ class View:
         self.window.state('zoomed')
         self.window.bind('<Escape>', lambda event: self.window.quit())
 
-        # init menu
-        self.menu = tk.Menu(self.menu, tearoff=False)
-        self.window.configure(menu=self.menu)
-        add_menu = tk.Menu(self.menu, tearoff=False)
-        add_menu.add_command(label='Add', command=lambda: None)  # todo remove menu
-        self.menu.add_cascade(label='Add Match', menu=add_menu)
-
         # tab config
         self.notebook = ttk.Notebook(self.window)
         self.tab1 = ttk.Frame(self.notebook)
