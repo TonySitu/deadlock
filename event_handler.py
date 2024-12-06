@@ -262,14 +262,17 @@ def handle_second_player_search(view: View):
     view.set_second_previous_player_selection(current_player)
 
     player_id = player_tree.focus()
-    hero_list = query_hero_list(player_id)
-    hero_tree = view.get_hero_tree()
-    clear_treeview(hero_tree)
-    for hero in hero_list:
-        iid = hero['hero_id']
-        hero_tree.insert(parent='', index=tk.END,
-                         iid=iid, values=(hero['hero_name'],))
-    print('second player searching')
+    if player_id:
+        hero_list = query_hero_list(player_id)
+        hero_tree = view.get_hero_tree()
+        clear_treeview(hero_tree)
+        clear_treeview(view.get_hero_stats_tree())
+        for hero in hero_list:
+            iid = hero['hero_id']
+            hero_tree.insert(parent='', index=tk.END,
+                             iid=iid, values=(hero['hero_name'],))
+
+        print('second player searching')
 
 
 def handle_hero_search(view: View):
