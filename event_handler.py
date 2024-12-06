@@ -38,7 +38,6 @@ def query_all_players() -> list:
 
     rows = cursor.fetchall()
     column_names = [description[0] for description in cursor.description]
-    print(column_names)
 
     for row in rows:
         player_list.append(dict(zip(column_names, row)))
