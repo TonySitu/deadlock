@@ -1,7 +1,6 @@
 import sqlite3
 
 
-# todo make all real round to 2 decimal places
 def create_tables(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS player (
