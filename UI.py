@@ -2,14 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 
 
-def get_sample_data1() -> list:
-    return ['hi', 'this', 'is', 'a', 'test', 'for', 'some', 'data']  # todo remove later
-
-
-def get_sample_data2() -> list:
-    return ['this', 'is', 'the', 'second', 'set', 'of', 'sample', 'data']  # todo remove later
-
-
 class View:
     DEFAULT_INPUT_TEXT = 'Enter nothing for all players or search for a specific player name'
     controller = None
@@ -96,9 +88,6 @@ class View:
         self.player_tree = ttk.Treeview(self.middle_frame, columns=('name',), show='headings', selectmode='browse')
         self.player_tree.pack(side=tk.LEFT, fill="both", expand=True, padx=5, pady=5)
         self.player_tree.heading('name', text='Player Name')
-        for data in get_sample_data1():
-            self.player_tree.insert(parent='', index=tk.END, values=(data,))
-
         self.player_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_player_search())
 
         # match tree config
@@ -108,9 +97,6 @@ class View:
         self.match_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
         self.match_tree.heading('more', text='Hero')
         self.match_tree.heading('data', text='KDA')
-        for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
-            self.match_tree.insert(parent='', index=tk.END, values=(data1, data2))
-
         self.match_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_match_search())
 
         # bottom frame config
@@ -164,9 +150,6 @@ class View:
                                                selectmode='browse')
         self.second_player_tree.pack(side=tk.LEFT, fill="both", expand=True, padx=5, pady=5)
         self.second_player_tree.heading('name', text='Player Name')
-        for data in get_sample_data1():
-            self.second_player_tree.insert(parent='', index=tk.END, values=(data,))
-
         self.second_player_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_second_player_search())
 
         # hero tree config
@@ -175,9 +158,6 @@ class View:
 
         self.hero_tree.pack(side=tk.RIGHT, fill="both", expand=True, padx=5, pady=5)
         self.hero_tree.heading('data', text='Heroes')
-        for data1, data2 in zip(get_sample_data1(), get_sample_data2()):
-            self.hero_tree.insert(parent='', index=tk.END, values=data1)
-
         self.hero_tree.bind('<<TreeviewSelect>>', lambda event: self.controller.on_hero_search())
 
         # second bottom frame config
