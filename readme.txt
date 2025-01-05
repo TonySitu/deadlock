@@ -5,4 +5,3 @@ or fill in the text box with a player name to search for a specific player.
 Clicking on the player names that appear on the tables will query matches in the first tab, or heroes in the second.
 Clicking matches in the first tab will query for specific matches.
 Clicking heroes in the second tab will query for hero statistics for a hero tied to a player.
-Video demonstration: https://studio.youtube.com/channel/UCcYYrCdoIgAB5eWN7MeWtLQ
